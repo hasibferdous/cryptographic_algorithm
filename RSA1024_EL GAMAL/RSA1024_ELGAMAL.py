@@ -5,10 +5,10 @@ from Crypto.Cipher import PKCS1_OAEP
 from sympy import mod_inverse, isprime, randprime
 from random import randint
 
-# Define the 10-digit key (0424313011) as bytes
+#Define the 10-digit key (0424313011) as bytes
 KEY = b"0424313011"
 
-# Function to generate test files of specified sizes
+#Function to generate test files of specified sizes
 def generate_test_files():
     sizes = [1 * 1024 * 1024, 100 * 1024 * 1024, 1 * 1024 * 1024 * 1024]  # 1MB, 100MB, 1GB
     filenames = []
@@ -19,24 +19,24 @@ def generate_test_files():
         filenames.append(filename)
     return filenames
 
-# RSA Implementation
+#RSA Implementation
 def rsa_cryptography(file_path):
     print(f"\nProcessing {file_path} with RSA...")
     with open(file_path, "rb") as f:
         data = f.read()
     
-    # RSA key generation
+    #RSA key generation
     rsa_key = RSA.generate(1024)
     private_key = rsa_key
     public_key = rsa_key.publickey()
 
-    # Encryption
+    #Encryption
     cipher = PKCS1_OAEP.new(public_key)
     start_time = time.time()
     ciphertext = cipher.encrypt(KEY)
     encryption_time = time.time() - start_time
 
-    # Decryption
+    #Decryption
     cipher = PKCS1_OAEP.new(private_key)
     start_time = time.time()
     decrypted_key = cipher.decrypt(ciphertext)
@@ -46,7 +46,7 @@ def rsa_cryptography(file_path):
     print(f"RSA Decryption Time: {decryption_time:.6f} seconds")
     return encryption_time, decryption_time
 
-# ElGamal Manual Implementation
+#ElGamal Implementation
 def elgamal_generate_keys(bits=512):
     """Generate ElGamal keys."""
     p = randprime(2**(bits - 1), 2**bits)
@@ -81,15 +81,15 @@ def elgamal_cryptography(file_path):
     with open(file_path, "rb") as f:
         data = f.read()
 
-    # Key generation
+    #Key generation
     public_key, private_key = elgamal_generate_keys()
 
-    # Encryption
+    #Encryption
     start_time = time.time()
     ciphertext = elgamal_encrypt(public_key, KEY)
     encryption_time = time.time() - start_time
 
-    # Decryption
+    #Decryption
     start_time = time.time()
     decrypted_key = elgamal_decrypt(private_key, public_key, ciphertext)
     decryption_time = time.time() - start_time
@@ -98,10 +98,10 @@ def elgamal_cryptography(file_path):
     print(f"ElGamal Decryption Time: {decryption_time:.6f} seconds")
     return encryption_time, decryption_time
 
-# Main function to run the performance analysis
+#Main function to run the performance analysis
 def main():
     print("Generating test files...")
-    test_files = generate_test_files()  # Create files of 1MB, 100MB, 1GB
+    test_files = generate_test_files()  #Create files of 1MB, 100MB, 1GB
 
     results = {"RSA": [], "ElGamal": []}
 
@@ -112,7 +112,7 @@ def main():
         elgamal_result = elgamal_cryptography(file_path)
         results["ElGamal"].append(elgamal_result)
 
-        # Clean up the test files to save space
+        #Clean up the test files to save space
         os.remove(file_path)
 
     print("\nFinal Results:")
